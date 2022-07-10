@@ -18,22 +18,37 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
   videoElement: Promise<MediaStream> = navigator.mediaDevices.getUserMedia({
     video: { facingMode: 'environment' }
   })
+  development: any
   canvasElement!: HTMLCanvasElement
   canvasContext!: CanvasRenderingContext2D
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.socketService.on('get-user-details', (data) => {
       console.log(data)
     })
   }
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     this.canvasElement = this.elCanvas.nativeElement
     this.canvasContext = this.canvasElement.getContext('2d')!
+    let tester
+    // try {
+      this.elLocalVideo.nativeElement.srcObject = await this.getSource() 
+      
+    // } catch(err) {
+    //   this.development = `${tester} ${err} faf`
+    // } finally {
+    //   this.development = `${tester} fasssf`
+    //   this.elLocalVideo.nativeElement.srcObject = tester as MediaProvider
+    // }
   }
-  development : any 
+  async getSource(): Promise< MediaProvider>{
+    return await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: {exact:'environment'} } 
+    }) || this.videoElement
+  }
   async startScan() {
-    this.elLocalVideo.nativeElement.srcObject = await this.videoElement
-    this.elLocalVideo.nativeElement.setAttribute('displayinline','true')
-    this.development = 'THIS IS THE NEW BUILD'
+
+    this.elLocalVideo.nativeElement.setAttribute('displayinline', 'true')
+    // this.development = this.videoElement
     this.scanIsActive = true
     this.elLocalVideo.nativeElement.play()
     requestAnimationFrame(this.scan.bind(this))
