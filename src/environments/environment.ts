@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  // socketUrl: '//10.0.0.8:3030'
   socketUrl: '//localhost:3030'
 };
 

@@ -9,14 +9,15 @@ import { SocketService } from '../services/socket.service';
 export class BarcodeScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('scanner', { static: false }) elLocalVideo!: ElementRef<HTMLVideoElement>
-  @ViewChild('canvas', { static: false }) elCanvas!: ElementRef
+  @ViewChild('canvas', { static: false }) elCanvas!: ElementRef<HTMLCanvasElement>
   scanIsActive: boolean = false
   scanResult :string|null = null
   constructor(private socketService : SocketService) { }
 
-  videoElement: any
-  canvasElement: any
-  canvasContext: any
+  videoElement!: any
+  canvasElement!: HTMLCanvasElement
+  canvasContext!: any
+
   ngOnInit(): void {
     this.socketService.on('get-user-details',(data)=>{
       console.log(data)
@@ -35,6 +36,7 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
     })
     this.videoElement.srcObject = stream
     this.videoElement.setAttribute('playsinline', true)
+    console.log(this.videoElement.constructor.name)
     this.scanIsActive = true
     this.videoElement.play()
     requestAnimationFrame(this.scan.bind(this))
