@@ -9,4 +9,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'angularChat';
   isMobileDevice : boolean = window.screen.width < 600
+  // isMobileDevice : boolean = true
 }

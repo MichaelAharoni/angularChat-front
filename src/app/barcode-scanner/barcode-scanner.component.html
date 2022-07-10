@@ -8,7 +8,7 @@
     <div class="what-we-scan">{{scanResult}}</div>
     <div class="video-window">
 
-        <video #scanner src="" [hidden]="!scanIsActive" width="100%"></video>
+        <video #scanner [hidden]="!scanIsActive" playsinline width="100%"></video>
     </div>
     <canvas #canvas hidden></canvas>
 </div>
