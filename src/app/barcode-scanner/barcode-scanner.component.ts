@@ -6,46 +6,51 @@ import { SocketService } from '../services/socket.service';
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss']
 })
-
 export class BarcodeScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('scanner', { static: false }) elLocalVideo!: ElementRef<HTMLVideoElement>
   @ViewChild('canvas', { static: false }) elCanvas!: ElementRef<HTMLCanvasElement>
   scanIsActive: boolean = false
-  scanResult: string | null = null
-  constructor(private socketService: SocketService) { }
+  scanResult :string|null = null
+  constructor(private socketService : SocketService) { }
 
-  videoElement: Promise<MediaStream> = navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'environment' }
-  })
+  videoElement!: any
   canvasElement!: HTMLCanvasElement
-  canvasContext!: CanvasRenderingContext2D
+  canvasContext!: any
+
   ngOnInit(): void {
-    this.socketService.on('get-user-details', (data) => {
+    this.socketService.on('get-user-details',(data)=>{
       console.log(data)
     })
   }
   ngAfterViewInit(): void {
+    this.videoElement = this.elLocalVideo.nativeElement
     this.canvasElement = this.elCanvas.nativeElement
-    this.canvasContext = this.canvasElement.getContext('2d')!
+    this.canvasContext = this.canvasElement.getContext('2d')
+
   }
-  development : any 
+  
   async startScan() {
-    this.elLocalVideo.nativeElement.srcObject = await this.videoElement
-    this.elLocalVideo.nativeElement.setAttribute('displayinline','true')
-    this.development = 'THIS IS THE NEW BUILD'
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    })
+    this.videoElement.srcObject = stream
+    this.videoElement.setAttribute('playsinline', true)
+    console.log(this.videoElement.constructor.name)
     this.scanIsActive = true
-    this.elLocalVideo.nativeElement.play()
+    this.videoElement.play()
     requestAnimationFrame(this.scan.bind(this))
   }
   scan() {
-    if (this.elLocalVideo.nativeElement.readyState === this.elLocalVideo.nativeElement.HAVE_ENOUGH_DATA) {
+    // this.scanIsActive = true
+    console.log('scan')
+    if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
 
-      this.canvasElement.height = this.elLocalVideo.nativeElement.videoHeight
-      this.canvasElement.width = this.elLocalVideo.nativeElement.videoWidth
+      this.canvasElement.height = this.videoElement.videoHeight
+      this.canvasElement.width = this.videoElement.videoWidth
 
       this.canvasContext.drawImage(
-        this.elLocalVideo.nativeElement,
+        this.videoElement,
         0,
         0,
         this.canvasElement.width,
@@ -60,7 +65,7 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: 'dontInvert'
       })
-
+      
       if (code) {
         this.scanIsActive = false
         this.scanResult = code.data
@@ -81,8 +86,9 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
   stopScan() {
     this.scanIsActive = false
   }
-  connectUserViaBarCode() {
-    this.socketService.emit('send-user-details', { userId: 'michael-alex-123', roomId: this.scanResult })
+  connectUserViaBarCode(){
+    console.log(this.scanResult)
+    this.socketService.emit('send-user-details',{userId:'michael-alex-123',roomId:this.scanResult})
 
   }
 
