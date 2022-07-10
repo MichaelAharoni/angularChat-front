@@ -29,9 +29,11 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
     this.canvasElement = this.elCanvas.nativeElement
     this.canvasContext = this.canvasElement.getContext('2d')!
   }
-
+  development : any 
   async startScan() {
     this.elLocalVideo.nativeElement.srcObject = await this.videoElement
+    this.elLocalVideo.nativeElement.setAttribute('displayinline','true')
+    this.development = 'THIS IS THE NEW BUILD'
     this.scanIsActive = true
     this.elLocalVideo.nativeElement.play()
     requestAnimationFrame(this.scan.bind(this))
