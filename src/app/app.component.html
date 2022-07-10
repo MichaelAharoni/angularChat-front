@@ -1,4 +1,7 @@
-<video-chat></video-chat>
-<contact-picker></contact-picker>
-<barcode-img></barcode-img>
-<barcode-scanner></barcode-scanner>
+<div *ngIf="isMobileDevice; else desktopTemplate">
+    <barcode-scanner></barcode-scanner> -->
+</div>
+<ng-template #desktopTemplate>
+    <h2>desktop login</h2>
+    <barcode-img></barcode-img>
+</ng-template>

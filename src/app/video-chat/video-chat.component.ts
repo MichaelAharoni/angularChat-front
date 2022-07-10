@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { SocketService } from './../services/socket.service';
 import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 
@@ -9,7 +10,7 @@ import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@an
 
 export class VideoChatComponent implements OnInit {
 
-  constructor(private socketService: SocketService, private cd: ChangeDetectorRef) { }
+  constructor(private socketService: SocketService, private cd: ChangeDetectorRef, private http: HttpClient) { }
 
   sendRoomName(room: HTMLInputElement) {
     this.socketService.emit('join-room', room.value)
@@ -81,7 +82,7 @@ export class VideoChatComponent implements OnInit {
 
   async createOffer() {
     await this.createPeerConnection()
-    const offer : RTCSessionDescriptionInit = await this.peerConn.createOffer()
+    const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()
     await this.peerConn.setLocalDescription(offer)
     this.socketService.emit('store-offer', offer)
   }
@@ -139,6 +140,23 @@ export class VideoChatComponent implements OnInit {
       this.newOffer = offer as RTCSessionDescription
       this.toggleIsGettingACall(true)
     })
-    this.socketService.on('got-candidate', async (candidate : RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
+    this.socketService.on('got-candidate', async (candidate: RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
+    this.testSms()
+  }
+
+  testSms() {
+    const options = {
+      method: 'POST',
+      url: 'https://d7sms.p.rapidapi.com/secure/sendbatch',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'undefined',
+        'X-RapidAPI-Key': '5befe274f3msh7a9691ed113e80fp1dae6ajsnad0cb51af997',
+        'X-RapidAPI-Host': 'd7sms.p.rapidapi.com'
+      },
+      data: '{"messages":[{"content":"Bulk SMS Content","from":"D7-Rapid","to":["Destination1","Destination2"]}]}'
+    };
+    console.log('hello')
+    this.http.post('https://d7sms.p.rapidapi.com/secure/sendbatch', '{"messages":[{"content":"Bulk SMS Content","from":"D7-Rapid","to":["+972546113469"]}]}',{headers:options.headers}).subscribe(res => console.log(res))
   }
 }

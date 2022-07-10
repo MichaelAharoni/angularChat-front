@@ -20,12 +20,9 @@ export class BarcodeImgComponent implements OnInit, AfterViewChecked {
 
     this.socketId = this.barCodeService.getBarcodeId() as string
     this.socketService.emit('join-room',this.socketId)
-    console.log(this.socketId)
-
 
     // subscribe to socket service here
     this.barCodeImg = this.barCodeService.generateBarcode(this.socketId)
-    console.log(this.barCodeImg, ' line 25')
   }
 
   async ngAfterViewChecked(): Promise<void> {
