@@ -32,7 +32,6 @@ export class VideoChatComponent implements OnInit {
 
   async createPeerConnection() {
 
-    const cameraOpt = (this.cameraMode === 'front') ? 'user' : 'environment'
     if (!this.localStream) {
       await this.setLocalStream()
       // this.localStream = await navigator.mediaDevices.getUserMedia({
@@ -156,6 +155,7 @@ export class VideoChatComponent implements OnInit {
     this.socketService.on('got-candidate', async (candidate: RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
   }
   async setLocalStream(): Promise<void> {
+    if(this.localStream)this.localStream.getTracks().forEach((track) => track.stop())
     const cameraOpt = (this.cameraMode === 'user') ? 'user' : 'environment'
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: {
@@ -168,8 +168,8 @@ export class VideoChatComponent implements OnInit {
       },
       audio: true
     })
-    // this.elContainer.nativeElement.style.display = 'inline'
     this.elLocalVideo.nativeElement.srcObject =   this.localStream
+    // this.elContainer.nativeElement.style.display = 'inline'
     // this.remoteStream = new MediaStream()
     // this.elRemoteVideo.nativeElement.srcObject = this.remoteStream
     // this.elRemoteVideo.nativeElement.style.display = 'block'
