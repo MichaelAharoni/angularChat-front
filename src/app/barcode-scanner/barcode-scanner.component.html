@@ -3,12 +3,12 @@
     <div class="ctrl-btns">
         <button *ngIf="!scanIsActive" (click)="startScan()" name="qr-scanner" class="start-scan">Start Scan</button>
         <button *ngIf="scanIsActive"(click)="stopScan()" name="stop-scan" class="stop-scan">Stop</button>
-        <button (click)="reset()" name="refresh" class="reset-scan">Retry</button>
     </div>
     <div class="what-we-scan">{{scanResult}}</div>
     <div class="video-window">
 
-        <video #scanner [hidden]="!scanIsActive" playsinline width="100%"></video>
+        <video #scanner [hidden]="!scanIsActive" width="100%"></video>
     </div>
     <canvas #canvas hidden></canvas>
 </div>
+<a routerLink="">Home</a>
