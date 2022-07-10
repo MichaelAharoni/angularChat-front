@@ -1,9 +1,16 @@
-<div *ngIf="isMobileDevice; else desktopTemplate">
+<!-- <div *ngIf="isMobileDevice; else desktopTemplate">
     <barcode-scanner></barcode-scanner>
-    <video-chat></video-chat>
-
+    <contact-picker></contact-picker>
 </div>
+
 <ng-template #desktopTemplate>
     <h2>desktop login</h2>
-    <barcode-img></barcode-img>
-</ng-template>
+    <barcode-scanner></barcode-scanner>
+</ng-template> -->
+<h1>ROOT</h1>
+<router-outlet></router-outlet>
+<div class="links-container">
+    <a routerLink="video-chat">video-chat</a>
+    <a routerLink="scan">scan</a>
+    <a routerLink="qr">QR Image</a>
+</div>

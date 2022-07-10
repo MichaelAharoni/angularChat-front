@@ -7,6 +7,7 @@
     <div class="call-action">
         <button class="mute-video" (click)="muteVideo()">{{this.isVideo ? 'Hide' : 'Unhide'}} video</button>
         <button class="mute-audio" (click)="muteAudio()">{{this.isAudio ? 'Mute' : 'Unmute'}}</button>
+        <a routerLink="">Home</a>
     </div>
 </div>
 <section *ngIf="isGettingACall" class="getting-call-modal">
