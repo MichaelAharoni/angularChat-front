@@ -5,8 +5,10 @@
     <video #localVideo (click)="switchLocalToRemoteSrc()" [muted]="true" class="local-video" autoplay playsinline></video>
     <video #remoteVideo class="remote-video" autoplay playsinline></video>
     <div class="call-action">
-        <button class="mute-video" (click)="muteVideo()">{{this.isVideo ? 'Hide' : 'Unhide'}} video</button>
-        <button class="mute-audio" (click)="muteAudio()">{{this.isAudio ? 'Mute' : 'Unmute'}}</button>
+        <button class="mute-video" (click)="muteVideo()">{{isVideo ? 'Hide' : 'Unhide'}} video</button>
+        <button class="mute-audio" (click)="muteAudio()">{{isAudio ? 'Mute' : 'Unmute'}}</button>
+        <button class="toggle-camera" (click)="toggleCamera()">{{cameraMode}}</button>
+
         <a routerLink="">Home</a>
     </div>
 </div>
