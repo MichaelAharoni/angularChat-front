@@ -55,19 +55,20 @@ export class VideoChatComponent implements OnInit {
 
     // https://xirsys.com/ STUN / TURN servers generator
     let configuration: RTCConfiguration = {
-      iceServers: [
-        { urls: ["stun:fr-turn1.xirsys.com"] }
-        , {
-          username: "ZclC25cEtLYQ_aecQg-DjFSyjrvJUdfQyBBBfXj3Sme-GMXGy1hSA_q3aucOY1EFAAAAAGLH9e50ZXN0ZXI=",
-          credential: "a70074a8-fe9e-11ec-8ef4-0242ac120004",
-          urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
-            "turn:fr-turn1.xirsys.com:3478?transport=udp",
-            "turn:fr-turn1.xirsys.com:80?transport=tcp",
-            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
-            "turns:fr-turn1.xirsys.com:443?transport=tcp",
-            "turns:fr-turn1.xirsys.com:5349?transport=tcp"
-          ]
-        }]
+      iceServers: [{
+        urls: ["stun:fr-turn1.xirsys.com"]
+      },
+      {
+        username: "MkclaOYC1js9p0kUlxSzbq915IqdWBB801aHUaFJMtxTjxOPkfKffr7PLKm8kIgIAAAAAGLLuRx0ZXN0ZXIx",
+        credential: "c0dabeca-00dc-11ed-a916-0242ac120004",
+        urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
+          "turn:fr-turn1.xirsys.com:3478?transport=udp",
+          "turn:fr-turn1.xirsys.com:80?transport=tcp",
+          "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+          "turns:fr-turn1.xirsys.com:443?transport=tcp",
+          "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ]
+      }]
     }
 
     this.peerConn = new RTCPeerConnection(configuration)
@@ -80,6 +81,30 @@ export class VideoChatComponent implements OnInit {
     this.peerConn.onicecandidate = (event: RTCPeerConnectionIceEvent) => {
       if (event.candidate) this.socketService.emit('store-candidate', event.candidate)
     }
+    this.peerConn.addEventListener("iceconnectionstatechange",async event => {
+      if (['failed', 'disconnected', 'close'].includes(this.peerConn.iceConnectionState)) {
+        /* possibly reconfigure the connection in some way here */
+        /* then request ICE restart */
+        console.log('restarting because of connection state changed !')
+        await this.renewOffer()
+        this.peerConn.restartIce();
+      }
+      console.log(this.peerConn.iceConnectionState, 'from connectionstatechange')
+    });
+    this.peerConn.addEventListener('signalingstatechange', (event) => {
+      console.log(this.peerConn.iceConnectionState, 'from signalchange')
+    })
+    this.peerConn.addEventListener('icecandidateerror', (event) => {
+      console.log(this.peerConn.iceConnectionState, 'from error')
+    })
+    this.peerConn.addEventListener(('icegatheringstatechange'), (event) => {
+      console.log(this.peerConn.iceConnectionState, 'from gatheringstate change')
+    })
+    this.peerConn.addEventListener(('negotiationneeded'),async (event) => {
+      console.log(this.peerConn.iceConnectionState, 'negitiation needed')
+      
+      // await this.renewOffer()
+    })
   }
 
   async createOffer() {
@@ -87,6 +112,13 @@ export class VideoChatComponent implements OnInit {
     const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()
     await this.peerConn.setLocalDescription(offer)
     this.socketService.emit('store-offer', offer)
+  }
+
+  async renewOffer() {
+    await this.createPeerConnection()
+    const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()
+    await this.peerConn.setLocalDescription(offer)
+    this.socketService.emit('re-store-offer', offer)
   }
 
   async createAnswer(offer: RTCSessionDescription) {
@@ -126,24 +158,13 @@ export class VideoChatComponent implements OnInit {
   async toggleCamera() {
     this.cameraMode = (this.cameraMode === 'user') ? 'environment' : 'user'
     await this.setLocalStream()
-    this.zone.run(() => {
-      console.log('enabled time travel');
-    });
+    await this.renewOffer()
+    // this.zone.run(() => {
+    //   console.log('enabled time travel');
+    // });
 
   }
   async ngOnInit(): Promise<void> {
-    // const cameraOpt  = (this.cameraMode==='front')?  'user' :  'environment' 
-    // this.localStream = await navigator.mediaDevices.getUserMedia({
-    //   video: {
-    //     facingMode:cameraOpt,
-    //     frameRate: 24,
-    //     width: {
-    //       min: 480, ideal: 720, max: 1280
-    //     },
-    //     aspectRatio: 1.33333
-    //   },
-    //   audio: true
-    // })
     await this.setLocalStream()
     this.socketService.on('got-answer', async (answer) => {
       if (!this.peerConn.currentRemoteDescription) await this.peerConn.setRemoteDescription(answer as RTCSessionDescriptionInit)
@@ -152,10 +173,13 @@ export class VideoChatComponent implements OnInit {
       this.newOffer = offer as RTCSessionDescription
       this.toggleIsGettingACall(true)
     })
+    this.socketService.on('re-got-offer', async (offer) => {
+      this.createAnswer(offer as RTCSessionDescription)
+    })
     this.socketService.on('got-candidate', async (candidate: RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
   }
   async setLocalStream(): Promise<void> {
-    if(this.localStream)this.localStream.getTracks().forEach((track) => track.stop())
+    if (this.localStream) this.localStream.getTracks().forEach((track) => track.stop())
     const cameraOpt = (this.cameraMode === 'user') ? 'user' : 'environment'
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: {
@@ -168,14 +192,15 @@ export class VideoChatComponent implements OnInit {
       },
       audio: true
     })
-    this.elLocalVideo.nativeElement.srcObject =   this.localStream
+    this.elLocalVideo.nativeElement.srcObject = this.localStream
     // this.elContainer.nativeElement.style.display = 'inline'
     // this.remoteStream = new MediaStream()
     // this.elRemoteVideo.nativeElement.srcObject = this.remoteStream
     // this.elRemoteVideo.nativeElement.style.display = 'block'
 
 
+
   }
-  
+
 
 }
