@@ -24,7 +24,7 @@ video {
     z-index: 10;
 }
 
-.remote-video {
+.remote-video, .remotes-container {
     background: #000;
     width: 100%;
     height: 100%;
@@ -58,4 +58,10 @@ button {
     position: fixed;
     top: 0;
     right: 0;
+}
+
+.remotes-container.multi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
 }
