@@ -1,5 +1,5 @@
 import { SocketService } from './../services/socket.service';
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, isDevMode } from '@angular/core';
 
 @Component({
   selector: 'video-chat',
@@ -9,13 +9,14 @@ import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, NgZone } f
 
 export class VideoChatComponent implements OnInit {
 
-  constructor(private socketService: SocketService, private zone: NgZone) { }
+  constructor(private socketService: SocketService) { }
 
   sendRoomName(room: HTMLInputElement) {
     this.socketService.emit('join-room', room.value)
     room.value = ''
   }
-  cameraMode = 'environment'
+
+  cameraMode = 'user'
   localStream!: MediaStream
   remoteStream!: MediaStream
   peerConn!: RTCPeerConnection
@@ -34,6 +35,7 @@ export class VideoChatComponent implements OnInit {
 
     if (!this.localStream) {
       await this.setLocalStream()
+      
       // this.localStream = await navigator.mediaDevices.getUserMedia({
       //   video: {
       //     facingMode:cameraOpt,
@@ -55,7 +57,7 @@ export class VideoChatComponent implements OnInit {
 
     // https://xirsys.com/ STUN / TURN servers generator
     let configuration: RTCConfiguration = {
-      iceServers: [{
+      iceServers: (isDevMode()) ? [] : [{
         urls: ["stun:fr-turn1.xirsys.com"]
       },
       {
@@ -74,6 +76,7 @@ export class VideoChatComponent implements OnInit {
     this.peerConn = new RTCPeerConnection(configuration)
     this.localStream.getTracks().forEach(track => this.peerConn.addTrack(track, this.localStream));
     this.peerConn.ontrack = (ev: RTCTrackEvent) => {
+      console.log('ev', ev) 
       ev.streams[0].getTracks().forEach((track: MediaStreamTrack) => {
         this.remoteStream.addTrack(track)
       })
