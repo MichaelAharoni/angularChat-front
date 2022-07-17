@@ -23,6 +23,7 @@ export class VideoChatComponent implements OnInit {
   isAudio: boolean = true
   isVideo: boolean = true
   isGettingACall: boolean = false
+  isSrcSwitch: boolean = false
   @ViewChild('videoGrid') elContainer!: ElementRef<HTMLDivElement>
   @ViewChild('localVideo') elLocalVideo!: ElementRef<HTMLVideoElement>
   @ViewChild('remoteVideo') elRemoteVideo!: ElementRef<HTMLVideoElement>
@@ -35,7 +36,7 @@ export class VideoChatComponent implements OnInit {
 
     if (!this.localStream) {
       await this.setLocalStream()
-      
+
       // this.localStream = await navigator.mediaDevices.getUserMedia({
       //   video: {
       //     facingMode:cameraOpt,
@@ -57,12 +58,25 @@ export class VideoChatComponent implements OnInit {
 
     // https://xirsys.com/ STUN / TURN servers generator
     let configuration: RTCConfiguration = {
-      iceServers: (isDevMode()) ? [] : [{
+      iceServers: (!isDevMode()) ? [{
         urls: ["stun:fr-turn1.xirsys.com"]
       },
       {
         username: "MkclaOYC1js9p0kUlxSzbq915IqdWBB801aHUaFJMtxTjxOPkfKffr7PLKm8kIgIAAAAAGLLuRx0ZXN0ZXIx",
         credential: "c0dabeca-00dc-11ed-a916-0242ac120004",
+        urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
+          "turn:fr-turn1.xirsys.com:3478?transport=udp",
+          "turn:fr-turn1.xirsys.com:80?transport=tcp",
+          "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+          "turns:fr-turn1.xirsys.com:443?transport=tcp",
+          "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ]
+      }] : [{
+        urls: ["stun:fr-turn1.xirsys.com"]
+      },
+      {
+        username: "xOYdCuwxJOn1ZzNPo3te-xiypyo7hPQNM2aXsVQio7LUyxdPmztqo5zqIUgb4OWNAAAAAGLS3TN0ZXN0ZXI0",
+        credential: "60f4a296-051e-11ed-872d-0242ac120004",
         urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
           "turn:fr-turn1.xirsys.com:3478?transport=udp",
           "turn:fr-turn1.xirsys.com:80?transport=tcp",
@@ -76,7 +90,7 @@ export class VideoChatComponent implements OnInit {
     this.peerConn = new RTCPeerConnection(configuration)
     this.localStream.getTracks().forEach(track => this.peerConn.addTrack(track, this.localStream));
     this.peerConn.ontrack = (ev: RTCTrackEvent) => {
-      console.log('ev', ev) 
+      console.log('ev', ev)
       ev.streams[0].getTracks().forEach((track: MediaStreamTrack) => {
         this.remoteStream.addTrack(track)
       })
@@ -84,7 +98,7 @@ export class VideoChatComponent implements OnInit {
     this.peerConn.onicecandidate = (event: RTCPeerConnectionIceEvent) => {
       if (event.candidate) this.socketService.emit('store-candidate', event.candidate)
     }
-    this.peerConn.addEventListener("iceconnectionstatechange",async event => {
+    this.peerConn.addEventListener("iceconnectionstatechange", async event => {
       if (['failed', 'disconnected', 'close'].includes(this.peerConn.iceConnectionState)) {
         /* possibly reconfigure the connection in some way here */
         /* then request ICE restart */
@@ -92,21 +106,21 @@ export class VideoChatComponent implements OnInit {
         await this.renewOffer()
         this.peerConn.restartIce();
       }
-      console.log(this.peerConn.iceConnectionState, 'from connectionstatechange')
-    });
-    this.peerConn.addEventListener('signalingstatechange', (event) => {
-      console.log(this.peerConn.iceConnectionState, 'from signalchange')
-    })
-    this.peerConn.addEventListener('icecandidateerror', (event) => {
-      console.log(this.peerConn.iceConnectionState, 'from error')
-    })
-    this.peerConn.addEventListener(('icegatheringstatechange'), (event) => {
-      console.log(this.peerConn.iceConnectionState, 'from gatheringstate change')
-    })
-    this.peerConn.addEventListener(('negotiationneeded'),async (event) => {
-      console.log(this.peerConn.iceConnectionState, 'negitiation needed')
-      
-      // await this.renewOffer()
+      //   console.log(this.peerConn.iceConnectionState, 'from connectionstatechange')
+      // });
+      // this.peerConn.addEventListener('signalingstatechange', (event) => {
+      //   console.log(this.peerConn.iceConnectionState, 'from signalchange')
+      // })
+      // this.peerConn.addEventListener('icecandidateerror', (event) => {
+      //   console.log(this.peerConn.iceConnectionState, 'from error')
+      // })
+      // this.peerConn.addEventListener(('icegatheringstatechange'), (event) => {
+      //   console.log(this.peerConn.iceConnectionState, 'from gatheringstate change')
+      // })
+      // this.peerConn.addEventListener(('negotiationneeded'), async (event) => {
+      //   console.log(this.peerConn.iceConnectionState, 'negitiation needed')
+
+      //   // await this.renewOffer()
     })
   }
 
@@ -132,13 +146,13 @@ export class VideoChatComponent implements OnInit {
     this.socketService.emit('store-answer', answer)
   }
 
-  muteAudio() {
-    this.isAudio = !this.isAudio
+  muteAudio(bool?: boolean) {
+    this.isAudio = (typeof bool === 'boolean') ? bool : !this.isAudio
     this.localStream.getAudioTracks()[0].enabled = this.isAudio
   }
 
-  muteVideo() {
-    this.isVideo = !this.isVideo
+  muteVideo(bool?: boolean) {
+    this.isVideo = (typeof bool === 'boolean') ? bool : !this.isVideo
     this.localStream.getVideoTracks()[0].enabled = this.isVideo
   }
 
@@ -154,6 +168,7 @@ export class VideoChatComponent implements OnInit {
   }
 
   switchLocalToRemoteSrc(): void {
+    this.isSrcSwitch = !this.isSrcSwitch
     const currLocalSrc = this.elLocalVideo.nativeElement.srcObject
     this.elLocalVideo.nativeElement.srcObject = this.elRemoteVideo.nativeElement.srcObject
     this.elRemoteVideo.nativeElement.srcObject = currLocalSrc
@@ -162,11 +177,14 @@ export class VideoChatComponent implements OnInit {
     this.cameraMode = (this.cameraMode === 'user') ? 'environment' : 'user'
     await this.setLocalStream()
     await this.renewOffer()
-    // this.zone.run(() => {
-    //   console.log('enabled time travel');
-    // });
-
+    this.setStreamSettings()
   }
+
+  setStreamSettings() {
+    this.muteAudio(this.isAudio)
+    this.muteVideo(this.isVideo)
+  }
+
   async ngOnInit(): Promise<void> {
     await this.setLocalStream()
     this.socketService.on('got-answer', async (answer) => {
@@ -196,14 +214,5 @@ export class VideoChatComponent implements OnInit {
       audio: true
     })
     this.elLocalVideo.nativeElement.srcObject = this.localStream
-    // this.elContainer.nativeElement.style.display = 'inline'
-    // this.remoteStream = new MediaStream()
-    // this.elRemoteVideo.nativeElement.srcObject = this.remoteStream
-    // this.elRemoteVideo.nativeElement.style.display = 'block'
-
-
-
   }
-
-
 }

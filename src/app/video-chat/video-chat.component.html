@@ -1,14 +1,20 @@
-<input type="text" #roomName placeholder="Enter room name" id="room-name"/>
+<input type="text" #roomName placeholder="Enter room name" id="room-name" />
 <button (click)="sendRoomName(roomName)">Send</button>
 <button (click)="createOffer()">startCall</button>
 <div #videoGrid class="video-grid">
-    <video #localVideo (click)="switchLocalToRemoteSrc()" [muted]="true" class="local-video" autoplay playsinline></video>
-    <video #remoteVideo class="remote-video" autoplay playsinline></video>
-    <div class="call-action">
-        <button class="mute-video" (click)="muteVideo()">{{isVideo ? 'Hide' : 'Unhide'}} video</button>
-        <button class="mute-audio" (click)="muteAudio()">{{isAudio ? 'Mute' : 'Unmute'}}</button>
-        <button class="toggle-camera" (click)="toggleCamera()">{{cameraMode}}</button>
-
+    <video #localVideo (click)="switchLocalToRemoteSrc()" [muted]="true" class="local-video" autoplay
+        playsinline></video>
+    <div class="remoteContainer" #remoteContainer>
+        <video class="remote-video" autoplay playsinline #remoteVideo></video>
+        <div class="call-action">
+            <button class="device video" (click)="muteVideo()"><span
+                    [ngClass]="{muted:true,'is-shown':isVideo}"></span></button>
+            <button class="device audio" (click)="muteAudio()"><span
+                    [ngClass]="{muted:true,'is-shown':isAudio}"></span></button>
+            <button class="device toggle-camera"
+                (click)="toggleCamera()"><span [ngClass]="{front:cameraMode === 'user',rear:cameraMode === 'environment'}"></span></button>
+            <button class="device"><span class="hang"></span></button>
+        </div>
         <a routerLink="">Home</a>
     </div>
 </div>

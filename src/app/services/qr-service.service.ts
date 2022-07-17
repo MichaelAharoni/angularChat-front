@@ -6,23 +6,23 @@ import { JwtService } from './jwt.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BarcodeServiceService {
+export class QrServiceService {
 
   constructor(private http: HttpClient, private jwt: JwtService) { }
 
-  getBarcodeId() {
-    const barcodeId = this.jwt.getToken() || this.generateAndsaveId()
-    return barcodeId
+  getQrId() {
+    const qrId = this.jwt.getToken() || this.generateAndsaveId()
+    return qrId
   }
-  generateBarcode(barcodeId: string) {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${barcodeId}`
+  generateQr(qrId: string) {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrId}`
 
   }
 
   generateAndsaveId() {
-    const barcodeId = this.makeId(10)
-    this.jwt.saveToken(barcodeId)
-    return barcodeId
+    const qrId = this.makeId(10)
+    this.jwt.saveToken(qrId)
+    return qrId
   }
   makeId(length = 6) {
     var txt = '';

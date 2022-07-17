@@ -1,14 +1,14 @@
 import { Calls, chatRoom, ContactUser } from '../interfaces/user'
-// const user = new User('moshe', phoneNumber)
+// const user = new User('moshe', phoneNum)
 export class User {
     constructor(
         private userName: string = '',
-        private phoneNumber: string = '',
+        private phoneNum: string = '',
 
     ) {
         this.asContactUser = {
             userName: this.userName,
-            phoneNumber: this.phoneNumber,
+            phoneNum: this.phoneNum,
             userImg: this.userImg
         }
     }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BarcodeImgComponent } from './barcode-img.component';
+import { QrImgComponent } from './qr-img.component';
 
-describe('BarcodeImgComponent', () => {
-  let component: BarcodeImgComponent;
-  let fixture: ComponentFixture<BarcodeImgComponent>;
+describe('QrImgComponent', () => {
+  let component: QrImgComponent;
+  let fixture: ComponentFixture<QrImgComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BarcodeImgComponent ]
+      declarations: [ QrImgComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BarcodeImgComponent);
+    fixture = TestBed.createComponent(QrImgComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

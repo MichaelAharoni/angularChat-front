@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angula
 import jsQR from 'jsqr'
 import { SocketService } from '../services/socket.service';
 @Component({
-  selector: 'barcode-scanner',
-  templateUrl: './barcode-scanner.component.html',
-  styleUrls: ['./barcode-scanner.component.scss']
+  selector: 'qr-scanner',
+  templateUrl: './qr-scanner.component.html',
+  styleUrls: ['./qr-scanner.component.scss']
 })
-export class BarcodeScannerComponent implements OnInit, AfterViewInit {
+export class QrScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('scanner', { static: false }) elLocalVideo!: ElementRef<HTMLVideoElement>
   @ViewChild('canvas', { static: false }) elCanvas!: ElementRef<HTMLCanvasElement>
@@ -71,7 +71,7 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
       if (code) {
         this.scanIsActive = false
         this.scanResult = code.data
-        this.connectUserViaBarCode()
+        this.connectUserViaqr()
       } else {
         if (this.scanIsActive) requestAnimationFrame(this.scan.bind(this))
 
@@ -85,7 +85,7 @@ export class BarcodeScannerComponent implements OnInit, AfterViewInit {
   stopScan() {
     this.scanIsActive = false
   }
-  connectUserViaBarCode() {
+  connectUserViaqr() {
     this.socketService.emit('send-user-details', { userId: 'michael-alex-123', roomId: this.scanResult })
   }
 }

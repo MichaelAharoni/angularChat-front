@@ -9,8 +9,8 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { VideoChatComponent } from './video-chat/video-chat.component';
 import { ContactPickerComponent } from './contact-picker/contact-picker.component';
 import { HttpClientModule } from '@angular/common/http';
-import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.component';
-import { BarcodeImgComponent } from './barcode-img/barcode-img.component';
+import { QrScannerComponent } from './qr-scanner/qr-scanner.component';
+import { QrImgComponent } from './qr-img/qr-img.component';
 
 const config: SocketIoConfig = {
 	url: environment.socketUrl, // socket server url;
@@ -24,8 +24,8 @@ const config: SocketIoConfig = {
     AppComponent,
     VideoChatComponent,
     ContactPickerComponent,
-    BarcodeScannerComponent,
-    BarcodeImgComponent
+    QrScannerComponent,
+    QrImgComponent
   ],
   imports: [
     BrowserModule,
