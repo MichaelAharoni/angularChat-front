@@ -11,6 +11,7 @@ import { ContactPickerComponent } from './contact-picker/contact-picker.componen
 import { HttpClientModule } from '@angular/common/http';
 import { QrScannerComponent } from './qr-scanner/qr-scanner.component';
 import { QrImgComponent } from './qr-img/qr-img.component';
+import { RegisterComponent } from './register/register.component';
 
 const config: SocketIoConfig = {
 	url: environment.socketUrl, // socket server url;
@@ -25,7 +26,8 @@ const config: SocketIoConfig = {
     VideoChatComponent,
     ContactPickerComponent,
     QrScannerComponent,
-    QrImgComponent
+    QrImgComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
