@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { JwtService } from './jwt.service';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
+import { JwtService } from '../jwt/jwt.service'
 
 @Injectable({
   providedIn: 'root'
@@ -25,13 +25,13 @@ export class QrServiceService {
     return qrId
   }
   makeId(length = 6) {
-    var txt = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var txt = ''
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-    for (var i = 0; i < length; i++) {
-      txt += possible.charAt(Math.floor(Math.random() * possible.length));
+    for (var i = 0;i < length;i++) {
+      txt += possible.charAt(Math.floor(Math.random() * possible.length))
     }
 
-    return txt;
+    return txt
   }
 }

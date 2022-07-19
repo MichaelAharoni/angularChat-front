@@ -1,22 +1,23 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { VideoChatComponent } from './video-chat/video-chat.component';
-import { ContactPickerComponent } from './contact-picker/contact-picker.component';
-import { HttpClientModule } from '@angular/common/http';
-import { QrScannerComponent } from './qr-scanner/qr-scanner.component';
-import { QrImgComponent } from './qr-img/qr-img.component';
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { FormsModule ,ReactiveFormsModule} from '@angular/forms'
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { ServiceWorkerModule } from '@angular/service-worker'
+import { environment } from '../environments/environment'
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io'
+import { VideoChatComponent } from './video-chat/video-chat.component'
+import { ContactPickerComponent } from './contact-picker/contact-picker.component'
+import { HttpClientModule } from '@angular/common/http'
+import { QrScannerComponent } from './qr-scanner/qr-scanner.component'
+import { QrImgComponent } from './qr-img/qr-img.component'
+import { RegisterComponent } from './register/register.component'
 
 const config: SocketIoConfig = {
-	url: environment.socketUrl, // socket server url;
-	options: {
-		transports: ['websocket']
-	}
+  url: environment.socketUrl, // socket server url;
+  options: {
+    transports: ['websocket']
+  }
 }
 
 @NgModule({
@@ -25,12 +26,15 @@ const config: SocketIoConfig = {
     VideoChatComponent,
     ContactPickerComponent,
     QrScannerComponent,
-    QrImgComponent
+    QrImgComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     SocketIoModule.forRoot(config),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
