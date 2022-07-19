@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SocketService } from './services/socket.service';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-root',

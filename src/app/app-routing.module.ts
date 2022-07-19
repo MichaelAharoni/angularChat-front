@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { QrImgComponent } from './qr-img/qr-img.component';
-import { QrScannerComponent } from './qr-scanner/qr-scanner.component';
-import { VideoChatComponent } from './video-chat/video-chat.component';
+import { AppComponent } from './app-cmp/app.component';
+import { QrImgComponent } from './pages/qr-img/qr-img.component';
+import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component';
+import { VideoChatComponent } from './pages/video-chat/video-chat.component';
 
 const routes: Routes = [
   {

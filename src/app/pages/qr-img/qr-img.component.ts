@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
-import { QrServiceService } from '../services/qr-service.service';
-import { SocketService } from '../services/socket.service';
+import { QrServiceService } from '../../services/qr-service.service';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'qr-img',

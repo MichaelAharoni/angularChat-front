@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import jsQR from 'jsqr'
-import { SocketService } from '../services/socket.service';
+import { SocketService } from '../../services/socket.service';
 @Component({
   selector: 'qr-scanner',
   templateUrl: './qr-scanner.component.html',
