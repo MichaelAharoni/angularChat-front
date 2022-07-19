@@ -1,5 +1,5 @@
 import { SocketService } from './../services/socket.service';
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, isDevMode, HostListener } from '@angular/core';
 
 @Component({
   selector: 'video-chat',
@@ -9,7 +9,7 @@ import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, isDevMode 
 
 export class VideoChatComponent implements OnInit {
 
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService, private cd: ChangeDetectorRef) { }
 
   sendRoomName(room: HTMLInputElement) {
     this.socketService.emit('join-room', room.value)
@@ -24,13 +24,14 @@ export class VideoChatComponent implements OnInit {
   isVideo: boolean = true
   isGettingACall: boolean = false
   isSrcSwitch: boolean = false
+  isOrientation: boolean = false
   @ViewChild('videoGrid') elContainer!: ElementRef<HTMLDivElement>
   @ViewChild('localVideo') elLocalVideo!: ElementRef<HTMLVideoElement>
   @ViewChild('remoteVideo') elRemoteVideo!: ElementRef<HTMLVideoElement>
   newOffer!: RTCSessionDescription
 
-  // facingMode : { exact : 'envinronment'},
-  // consider adding facingmode
+  @HostListener('window:deviceorientation', ['$event'])
+  load(ev: DeviceOrientationEvent) { this.isOrientation = ev.absolute; this.cd.markForCheck() }
 
   async createPeerConnection() {
 
@@ -75,8 +76,8 @@ export class VideoChatComponent implements OnInit {
         urls: ["stun:fr-turn1.xirsys.com"]
       },
       {
-        username: "xOYdCuwxJOn1ZzNPo3te-xiypyo7hPQNM2aXsVQio7LUyxdPmztqo5zqIUgb4OWNAAAAAGLS3TN0ZXN0ZXI0",
-        credential: "60f4a296-051e-11ed-872d-0242ac120004",
+        username: "HoxGSsM2D8ecZ1eN0HUXa34zrWzPlrlTZk_-2t99S7KSIeoifGRdfnCPMx4Zu7wPAAAAAGLWSeh0ZXN0NQ==",
+        credential: "eff406b0-0728-11ed-b29e-0242ac120004",
         urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
           "turn:fr-turn1.xirsys.com:3478?transport=udp",
           "turn:fr-turn1.xirsys.com:80?transport=tcp",
@@ -167,17 +168,19 @@ export class VideoChatComponent implements OnInit {
     this.isGettingACall = bool
   }
 
-  switchLocalToRemoteSrc(): void {
-    this.isSrcSwitch = !this.isSrcSwitch
+  switchLocalToRemoteSrc(bool?: boolean): void {
     const currLocalSrc = this.elLocalVideo.nativeElement.srcObject
     this.elLocalVideo.nativeElement.srcObject = this.elRemoteVideo.nativeElement.srcObject
     this.elRemoteVideo.nativeElement.srcObject = currLocalSrc
+    if (typeof bool === 'boolean' && bool) return
+    this.isSrcSwitch = !this.isSrcSwitch
   }
   async toggleCamera() {
     this.cameraMode = (this.cameraMode === 'user') ? 'environment' : 'user'
     await this.setLocalStream()
     await this.renewOffer()
     this.setStreamSettings()
+    if (this.isSrcSwitch) this.switchLocalToRemoteSrc(this.isSrcSwitch)
   }
 
   setStreamSettings() {
@@ -201,10 +204,11 @@ export class VideoChatComponent implements OnInit {
   }
   async setLocalStream(): Promise<void> {
     if (this.localStream) this.localStream.getTracks().forEach((track) => track.stop())
+    const rearCamera = (await navigator.mediaDevices.enumerateDevices()).filter((device) => device.kind === 'videoinput')[3]
     const cameraOpt = (this.cameraMode === 'user') ? 'user' : 'environment'
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: cameraOpt,
+        [(rearCamera && this.cameraMode === 'environment') ? 'deviceId' : 'facingMode']: (rearCamera && this.cameraMode === 'environment') ? rearCamera.deviceId : cameraOpt,
         frameRate: 24,
         width: {
           min: 480, ideal: 720, max: 1280
