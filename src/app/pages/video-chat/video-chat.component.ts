@@ -1,4 +1,4 @@
-import { SocketService } from './../services/socket/socket.service';
+import { SocketService } from '../../services/socket/socket.service';
 import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef, isDevMode, HostListener } from '@angular/core';
 
 @Component({
