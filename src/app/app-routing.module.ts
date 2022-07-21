@@ -4,10 +4,11 @@ import { AppComponent } from './app-cmp/app.component'
 import { QrImgComponent } from './pages/qr-img/qr-img.component'
 import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component'
 import { VideoChatComponent } from './pages/video-chat/video-chat.component'
-import { RegisterComponent } from './register/register.component'
+import { RegisterComponent } from './pages/register/register.component'
+import { DesktopLoginGuard } from './guards/desktop-login.guard'
 
 const routes: Routes = [
-  { path: '', component: AppComponent  ,},
+  { path: '', component: AppComponent, canActivate:[DesktopLoginGuard]},
   { path: 'scan', component: QrScannerComponent ,},
   { path: 'qr', component: QrImgComponent },
   { path: 'video-chat', component: VideoChatComponent },
@@ -21,3 +22,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

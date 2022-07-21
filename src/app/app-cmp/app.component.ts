@@ -1,3 +1,6 @@
+import { ContactUser } from './../models/user';
+import { lastValueFrom } from 'rxjs';
+import { UserContactService } from './../services/user/user-contacts.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SocketService } from '../services/socket/socket.service';
@@ -8,12 +11,17 @@ import { SocketService } from '../services/socket/socket.service';
   styleUrls: ['./app.component.scss']
 })
 
+
 export class AppComponent implements OnInit {
-  constructor(private route : ActivatedRoute,private socketService : SocketService){}
+
+  contacts! : Promise<ContactUser[]>
+
+  constructor(private route : ActivatedRoute,private socketService : SocketService,private userContactService : UserContactService){}
   title = 'angularChat';
   isMobileDevice : boolean = window.screen.width < 600
   
   ngOnInit(): void {
+    this.contacts = this.userContactService.query()
     // this.route.params.subscribe((params)=>console.log(params))
   }
 
