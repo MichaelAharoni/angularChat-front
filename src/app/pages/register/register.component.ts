@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { User } from 'src/app/models/classes'
+import { UserService } from 'src/app/services/user/user.service'
 
 @Component({
   selector: 'register',
@@ -7,14 +9,17 @@ import { Component, OnInit } from '@angular/core'
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
-  phoneNumber!: number
-  userName!:string
+  constructor(private userService: UserService) { }
+  phoneNum: string = ''
+  userName: string = ''
+
   ngOnInit(): void {
-    // check if user logged in
+    // this .user = this.userService.getEmptyUser()
 
   }
-  onSaveUser(){
+  onSaveUser() {
+
+    const newUser = new User(this.userName, this.phoneNum)
     // bring empty user with this data
   }
 

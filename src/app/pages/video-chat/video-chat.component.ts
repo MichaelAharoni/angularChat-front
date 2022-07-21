@@ -33,31 +33,34 @@ export class VideoChatComponent implements OnInit {
   @HostListener('window:deviceorientation', ['$event'])
   load(ev: DeviceOrientationEvent) { this.isOrientation = ev.absolute; this.cd.markForCheck() }
 
+  async ngOnInit(): Promise<void> {
+    await this.setLocalStream()
+    this.socketService.on('got-answer', async (answer) => {
+      if (!this.peerConn.currentRemoteDescription) await this.peerConn.setRemoteDescription(answer as RTCSessionDescriptionInit)
+    })
+    this.socketService.on('got-offer', async (offer) => {
+      this.newOffer = offer as RTCSessionDescription
+      this.toggleIsGettingACall(true)
+    })
+    this.socketService.on('re-got-offer', async (offer) => {
+      this.createAnswer(offer as RTCSessionDescription)
+    })
+    this.socketService.on('got-candidate', async (candidate: RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
+  }
+
   async createPeerConnection() {
 
     if (!this.localStream) {
       await this.setLocalStream()
-
-      // this.localStream = await navigator.mediaDevices.getUserMedia({
-      //   video: {
-      //     facingMode:cameraOpt,
-      //     frameRate: 24,
-      //     width: {
-      //       min: 480, ideal: 720, max: 1280
-      //     },
-      //     aspectRatio: 1.33333
-      //   },
-      //   audio: true
-      // })
     }
 
     this.elContainer.nativeElement.style.display = 'inline'
-    // this.elLocalVideo.nativeElement.srcObject =   this.localStream
     this.remoteStream = new MediaStream()
     this.elRemoteVideo.nativeElement.srcObject = this.remoteStream
     this.elRemoteVideo.nativeElement.style.display = 'block'
 
     // https://xirsys.com/ STUN / TURN servers generator
+
     let configuration: RTCConfiguration = {
       iceServers: (!isDevMode()) ? [{
         urls: ["stun:fr-turn1.xirsys.com"]
@@ -101,27 +104,9 @@ export class VideoChatComponent implements OnInit {
     }
     this.peerConn.addEventListener("iceconnectionstatechange", async event => {
       if (['failed', 'disconnected', 'close'].includes(this.peerConn.iceConnectionState)) {
-        /* possibly reconfigure the connection in some way here */
-        /* then request ICE restart */
-        console.log('restarting because of connection state changed !')
         await this.renewOffer()
         this.peerConn.restartIce();
       }
-      //   console.log(this.peerConn.iceConnectionState, 'from connectionstatechange')
-      // });
-      // this.peerConn.addEventListener('signalingstatechange', (event) => {
-      //   console.log(this.peerConn.iceConnectionState, 'from signalchange')
-      // })
-      // this.peerConn.addEventListener('icecandidateerror', (event) => {
-      //   console.log(this.peerConn.iceConnectionState, 'from error')
-      // })
-      // this.peerConn.addEventListener(('icegatheringstatechange'), (event) => {
-      //   console.log(this.peerConn.iceConnectionState, 'from gatheringstate change')
-      // })
-      // this.peerConn.addEventListener(('negotiationneeded'), async (event) => {
-      //   console.log(this.peerConn.iceConnectionState, 'negitiation needed')
-
-      //   // await this.renewOffer()
     })
   }
 
@@ -188,20 +173,6 @@ export class VideoChatComponent implements OnInit {
     this.muteVideo(this.isVideo)
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.setLocalStream()
-    this.socketService.on('got-answer', async (answer) => {
-      if (!this.peerConn.currentRemoteDescription) await this.peerConn.setRemoteDescription(answer as RTCSessionDescriptionInit)
-    })
-    this.socketService.on('got-offer', async (offer) => {
-      this.newOffer = offer as RTCSessionDescription
-      this.toggleIsGettingACall(true)
-    })
-    this.socketService.on('re-got-offer', async (offer) => {
-      this.createAnswer(offer as RTCSessionDescription)
-    })
-    this.socketService.on('got-candidate', async (candidate: RTCIceCandidateInit) => { if (this.peerConn && this.peerConn.remoteDescription?.type) await this.peerConn.addIceCandidate(candidate) })
-  }
   async setLocalStream(): Promise<void> {
     if (this.localStream) this.localStream.getTracks().forEach((track) => track.stop())
     const rearCamera = (await navigator.mediaDevices.enumerateDevices()).filter((device) => device.kind === 'videoinput')[3]

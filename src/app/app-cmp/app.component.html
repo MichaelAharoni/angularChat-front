@@ -10,6 +10,7 @@
 <!-- conditional header rendering -->
 <header class="app-header"></header>
 <router-outlet></router-outlet>
+<pre>{{contacts | async | json}}</pre>
 <div class="links-container">
     <a routerLink="video-chat">video-chat</a>
     <a routerLink="scan">scan</a>
