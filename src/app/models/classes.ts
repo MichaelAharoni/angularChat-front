@@ -1,4 +1,4 @@
-import { ContactUser, chatRoom, Calls } from './user';
+import { ContactUser, chatRoom, Calls } from './interfaces';
 export class User {
     constructor(
         userName: string = '',

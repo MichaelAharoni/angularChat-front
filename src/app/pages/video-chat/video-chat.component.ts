@@ -109,7 +109,10 @@ export class VideoChatComponent implements OnInit {
       }
     })
   }
-
+/* #CR COMMENT => {
+*******************
+YOUR COMMENT
+} */
   async createOffer() {
     await this.createPeerConnection()
     const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()
@@ -141,6 +144,8 @@ export class VideoChatComponent implements OnInit {
     this.isVideo = (typeof bool === 'boolean') ? bool : !this.isVideo
     this.localStream.getVideoTracks()[0].enabled = this.isVideo
   }
+
+  
 
   answerCall(bool: boolean) {
     if (bool) {

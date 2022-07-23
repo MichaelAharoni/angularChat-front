@@ -1,4 +1,4 @@
-import { ContactUser } from './../../models/user';
+import { ContactUser } from './../../models/interfaces';
 import { lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';

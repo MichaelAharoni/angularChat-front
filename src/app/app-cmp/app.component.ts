@@ -1,4 +1,4 @@
-import { ContactUser } from './../models/user';
+import { ContactUser } from './../models/interfaces';
 import { lastValueFrom } from 'rxjs';
 import { UserContactService } from './../services/user/user-contacts.service';
 import { Component, OnInit } from '@angular/core';
@@ -35,5 +35,6 @@ export class AppComponent implements OnInit {
 
     return txt;
   }
+
   // isMobileDevice : boolean = true
 }
