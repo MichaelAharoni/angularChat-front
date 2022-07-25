@@ -1,15 +1,18 @@
 <div class="register">
     <header></header>
     <div class="register-page-paragraph"></div>
-    <form (ngSubmit)="onSaveUser()">
+    <form class="login-form" *ngIf="!isCodeReady" (ngSubmit)="onSendVerificationCode()">
         
         <label for="phone-num">Phone number:</label>
-        <input [(ngModel)]="phoneNum" type="tel" name="phone-num" pattern="[0-9]{10}">
+        <input [(ngModel)]="phoneNum" type="tel" name="phone-num" required="true" pattern="[0-9]{10}">
         
         <label for="user-name">User name:</label>
-        <input [(ngModel)]="userName" type="tel" name="user-name" pattern="[0-9]{10}">
+        <input [(ngModel)]="userName" type="tel" name="user-name" >
         <button>Save</button>
     </form>
-        <p>{{phoneNum}}</p>
-    <p>{{userName}}</p>
+    <form *ngIf="isCodeReady" (ngSubmit)="onSumbitVCode()">
+        <label for="v-code">Verfication code:</label>
+        <input [(ngModel)]="vCode" type="text" name="v-code">
+        <button class="sumbit-code">Submit</button>
+    </form >
 </div>

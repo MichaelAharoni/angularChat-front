@@ -1,11 +1,94 @@
-.bar-code{
-    text-align: center;
-    border: 1px solid black;
-    width: 500px;
-    height: 500px;
-    & img{
-        width: 300px;
-        height: 300px;
-        border: 1px solid black;
+.qr-container {
+
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    & header {
+        display: flex;
+        height: 120px;
+        background-color: rgb(7 186 167);
+        align-items: center;
+        padding: 0 40px;
+
+        & .logo {
+
+            background-image: url(../../../assets/imgs/logo.png);
+            background-size: 100%;
+            background-color: lightgreen;
+            border-radius: 50%;
+            border: white 3px solid;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .lower-half {
+        flex-grow: 1;
+        background-color: rgb(213 218 213);
+
+
+    }
+
+    .qr-modal {
+        height: 80vh;
+        width: 80%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        position: absolute;
+        background-color: #f0f0f0;
+
+
+        & .user-help {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 50%;
+            gap: 3rem;
+
+            & ol {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        .qr-img-container {
+
+            & img {
+                width: 300px;
+                height: 300px;
+                border: 1px solid black;
+            }
+        }
+
     }
 }
+
+//      
+/*
+
+
+<div class="qr-container">
+    <header class="qr-header">
+        <div class="logo"></div>
+    </header>
+    <div class="lower-half"></div>
+    <div class="qr-modal">
+        <div class="user-help">
+            <h1 class="headline">To use AngChatApp on you computer:</h1>
+            <p>1. Open your AngChatApp on your phone</p>
+            <p>2. Tap <strong>Menu</strong> or <strong>Settings</strong> and select <strong>AngChat Web</strong></p>
+            <p>3. Point your phone to this screen to capture the code</p>
+        </div>
+        <div class="qr-img-container">
+            <img [src]="qrImg" alt="">
+        </div>
+    </div>
+</div>
+
+*/
