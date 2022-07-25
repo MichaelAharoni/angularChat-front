@@ -1,6 +1,15 @@
 <div class="register">
     <header></header>
     <div class="register-page-paragraph"></div>
-    <input [(ngModel)]="phoneNumber" type="tel" name="" pattern="[0-9]{10}">
-    <p>{{phoneNumber}}</p>
+    <form (ngSubmit)="onSaveUser()">
+        
+        <label for="phone-num">Phone number:</label>
+        <input [(ngModel)]="phoneNum" type="tel" name="phone-num" pattern="[0-9]{10}">
+        
+        <label for="user-name">User name:</label>
+        <input [(ngModel)]="userName" type="tel" name="user-name" pattern="[0-9]{10}">
+        <button>Save</button>
+    </form>
+        <p>{{phoneNum}}</p>
+    <p>{{userName}}</p>
 </div>

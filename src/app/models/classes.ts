@@ -1,14 +1,20 @@
-import { ContactUser, chatRoom, Calls } from './interfaces';
+import { ContactUser, chatRoom, Calls } from './interfaces'
 export class User {
     constructor(
         userName: string = '',
         phoneNum: string = '',
-    ) {
+        
+        ) {
+            this.userName = userName
+            this.phoneNum = phoneNum,
         this.asContactUser = {
             userName: userName,
             phoneNum: phoneNum,
+            imgUrl: this.imgUrl
         }
     }
+    phoneNum: string 
+    userName: string 
     _id?: string
     imgUrl: string = 'defultImg'
     contacts: ContactUser[] = []
@@ -18,6 +24,6 @@ export class User {
     blockedContacts: ContactUser[] = []
     pinnedContacts: ContactUser[] = []
     callsHistory: Calls[] = []
-    public asContactUser: ContactUser = {}
+    asContactUser: ContactUser = {}
     chatRooms: chatRoom[] = []
 }

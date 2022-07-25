@@ -13,7 +13,8 @@ import { ContactPickerComponent } from './cmps/contact-picker/contact-picker.com
 import { HttpClientModule } from '@angular/common/http';
 import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component';
 import { QrImgComponent } from './pages/qr-img/qr-img.component';
-import { RegisterComponent } from './pages/register/register.component'
+import { RegisterComponent } from './pages/register/register.component';
+import { RootComponent } from './pages/root/root.component'
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;
@@ -29,7 +30,8 @@ const config: SocketIoConfig = {
     ContactPickerComponent,
     QrScannerComponent,
     QrImgComponent,
-    RegisterComponent
+    RegisterComponent,
+    RootComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from './../../services/user/user.service';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { QrServiceService } from '../../services/qr/qr-service.service';
 import { SocketService } from '../../services/socket/socket.service';
 
@@ -8,23 +10,29 @@ import { SocketService } from '../../services/socket/socket.service';
   styleUrls: ['./qr-img.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QrImgComponent implements OnInit, AfterViewChecked {
+export class QrImgComponent implements OnInit {
 
 
   socketId!: string
   qrImg!: string
-  constructor(private qrService: QrServiceService, private socketService: SocketService) {
+  constructor(
+    private qrService: QrServiceService,
+    private socketService: SocketService,
+    private userService: UserService,
+    private router: Router
+  ) {
 
   }
   ngOnInit(): void {
-
+    this.socketService.on('get-user-details', async (phoneNum: string) => {
+      await this.userService.login({ phoneNum })
+      this.router.navigateByUrl('/')
+    })
     this.socketId = this.qrService.getQrId() as string
-    this.socketService.emit('join-room',this.socketId)
+    this.socketService.emit('join-room', this.socketId)
 
     // subscribe to socket service here
     this.qrImg = this.qrService.generateQr(this.socketId)
   }
 
-  async ngAfterViewChecked(): Promise<void> {
-  }
 }

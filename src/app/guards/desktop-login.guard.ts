@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from 'src/app/models/classes';
+import { Injectable, isDevMode } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -6,13 +8,21 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DesktopLoginGuard implements CanActivate {
-  constructor(private router: Router) { }
+  constructor(private router: Router, private userService: UserService) { }
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (Math.random() > 0.5) return this.router.navigate(['qr'])
-    if (Math.random() > 0.5) return this.router.navigate(['qr'])
-    return true;
+    state: RouterStateSnapshot): Promise<boolean | UrlTree> | boolean {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const user = this.userService.getCurrUser() || {}
+        if (!user?.phoneNum) {
+          // const cmpUrl = (window.outerWidth < 550) ? 'register' : 'qr'
+          let cmpUrl = (window.outerWidth < 550) ? 'register' : 'qr'
+          // if (isDevMode()) cmpUrl = 'register'
+          this.router.navigateByUrl(cmpUrl)
+        }
+        else resolve(true)
+      }, 400);
+    })
   }
-
 }
