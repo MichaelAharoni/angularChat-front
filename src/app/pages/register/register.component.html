@@ -1,15 +1,21 @@
 <div class="register">
-    <header></header>
+    <header class="app-header">
+        <div class="logo"></div>
+    </header>
     <div class="register-page-paragraph"></div>
-    <form (ngSubmit)="onSaveUser()">
-        
-        <label for="phone-num">Phone number:</label>
-        <input [(ngModel)]="phoneNum" type="tel" name="phone-num" pattern="[0-9]{10}">
-        
-        <label for="user-name">User name:</label>
-        <input [(ngModel)]="userName" type="tel" name="user-name" pattern="[0-9]{10}">
-        <button>Save</button>
+    <form class="login-form" *ngIf="!isCodeReady" (ngSubmit)="onSendVerificationCode()">
+        <div class="phone-number-container">
+            <span>Phone</span>
+            <input [(ngModel)]="phoneNum" [focus]="true" type="tel" autocomplete="off" name="phone-num" required="true">
+        </div>
+
+        <button class="sign-btn register-btn">Sign In</button>
     </form>
-        <p>{{phoneNum}}</p>
-    <p>{{userName}}</p>
-</div>
+    <form class="vcode-form" *ngIf="isCodeReady" (ngSubmit)="onSumbitVCode()">
+            <h1  >Verfication code:</h1>
+            <input *ngFor="let val of codeLength ;index as idx; trackBy:generateKey" [focus]="idx === 0" [(ngModel)]="codeLength[idx]"
+            type="text" [attr.data-idx]="idx" (keydown.backspace)="onBackSpace($event)" (input)="onInputNumber($event)"
+            maxlength="1" onfocus="this.value=''" [name]="idx+''">
+            <button class="sumbit-code register-btn">Submit</button>
+    </form>
+</div> 

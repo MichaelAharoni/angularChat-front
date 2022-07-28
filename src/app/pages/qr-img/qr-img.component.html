@@ -1,7 +1,20 @@
-<div class="bar-code">
-
-    <h1>QR code </h1>
-
-    <img  [src]="qrImg" alt="">
+<div class="qr-container">
+    <header class="app-header">
+        <div class="logo"></div>
+    </header>
+    <div class="lower-half"></div>
+    <div class="qr-modal">
+        <div class="user-help">
+            <h2 class="headline">To use AngChatApp on you computer:</h2>
+            <ol>
+                <p>1. Open your AngChatApp on your phone</p>
+                <p>2. Tap <strong>Menu</strong> or <strong>Settings</strong> and select <strong>AngChat Web</strong></p>
+                <p>3. Point your phone to this screen to capture the code</p>
+            </ol>
+        </div>
+        <div class="qr-img-container">
+            <img [src]="qrImg" alt="">
+        </div>
+    </div>
 </div>
-<a routerLink="">Home</a>
+<!-- <a routerLink="">Home</a> -->

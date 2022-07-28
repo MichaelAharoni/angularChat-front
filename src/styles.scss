@@ -1,1 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    padding: 0;
+    margin: 0;
+
+    & .app-header {
+        display: flex;
+        height: 120px;
+        background-color: rgb(7 186 167);
+        align-items: center;
+        padding: 0 40px;
+
+        & .logo {
+
+            background-image: url(./assets/imgs/logo.png);
+            background-size: 100%;
+            background-color: lightgreen;
+            border-radius: 50%;
+            border: white 3px solid;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    padding: 0;
+    margin: 0;
+}
+
+ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

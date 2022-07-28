@@ -14,7 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component';
 import { QrImgComponent } from './pages/qr-img/qr-img.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { RootComponent } from './pages/root/root.component'
+import { RootComponent } from './pages/root/root.component';
+import { FocusDirective } from './directives/focus.directive'
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;
@@ -31,7 +32,8 @@ const config: SocketIoConfig = {
     QrScannerComponent,
     QrImgComponent,
     RegisterComponent,
-    RootComponent
+    RootComponent,
+    FocusDirective
   ],
   imports: [
     BrowserModule,
