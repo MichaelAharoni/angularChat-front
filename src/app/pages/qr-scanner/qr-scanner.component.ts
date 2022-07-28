@@ -1,3 +1,5 @@
+import { lastValueFrom ,map ,mergeMap,pipe, take, takeLast, tap } from 'rxjs';
+import { Route, Router, RouterModule, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { User } from 'src/app/models/classes';
 import { UserService } from 'src/app/services/user/user.service';
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -15,25 +17,31 @@ export class QrScannerComponent implements OnInit, AfterViewInit {
   scanIsActive: boolean = false
   scanResult!: string
   user!: User
+  contacts!:any
 
   constructor(
     private socketService: SocketService,
-    private userService: UserService
+    private userService: UserService,
+    private route:ActivatedRoute
   ) { }
 
-  // videoElement: Promise<MediaStream> = navigator.mediaDevices.getUserMedia(
-  //   {
-  //   video: { facingMode: 'environment' }
-  // })
   canvasElement!: HTMLCanvasElement
   canvasContext!: CanvasRenderingContext2D
   async ngOnInit(): Promise<void> {
-    this.userService.$currUser.subscribe((user) => {
-      this.user = user
-      console.log('Logged into ', this.user)
-    })
+      console.log('before')
+      this.userService.$currUser.subscribe(user=>{this.user = user})
+      // this.route.data.pipe(mergeMap(({contacts})=>contacts )).subscribe(mydata=>console.log('mydata', mydata) )
+      this.route.data.subscribe(({contacts})=>this.contacts = contacts)      // this.route.data.subscribe(({contacts})=>{
+      //   contacts.subscribe((con:any)=>console.log('con', con) )
+      // })
+    
+
   }
   async ngAfterViewInit(): Promise<void> {
+    // const res = await lastValueFrom(this.route.data.subscribe(contacts=>contacts))
+    // const res = 
+    // console.log(res,'INSHALA')
+    console.log('BAAAAA')
     this.canvasElement = this.elCanvas.nativeElement
     this.canvasContext = this.canvasElement.getContext('2d')!
     const rearCamera = (await navigator.mediaDevices.enumerateDevices()).filter((device) => device.kind === 'videoinput')[3]

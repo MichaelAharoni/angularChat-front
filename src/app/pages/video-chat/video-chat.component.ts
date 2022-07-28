@@ -62,7 +62,7 @@ export class VideoChatComponent implements OnInit {
     // https://xirsys.com/ STUN / TURN servers generator
 
     let configuration: RTCConfiguration = {
-      iceServers: (!isDevMode()) ? [{
+      iceServers: (isDevMode()) ? [{
         urls: ["stun:fr-turn1.xirsys.com"]
       },
       {
@@ -75,20 +75,17 @@ export class VideoChatComponent implements OnInit {
           "turns:fr-turn1.xirsys.com:443?transport=tcp",
           "turns:fr-turn1.xirsys.com:5349?transport=tcp"
         ]
-      }] : [{
-        urls: ["stun:fr-turn1.xirsys.com"]
-      },
-      {
-        username: "HoxGSsM2D8ecZ1eN0HUXa34zrWzPlrlTZk_-2t99S7KSIeoifGRdfnCPMx4Zu7wPAAAAAGLWSeh0ZXN0NQ==",
-        credential: "eff406b0-0728-11ed-b29e-0242ac120004",
-        urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
-          "turn:fr-turn1.xirsys.com:3478?transport=udp",
-          "turn:fr-turn1.xirsys.com:80?transport=tcp",
-          "turn:fr-turn1.xirsys.com:3478?transport=tcp",
-          "turns:fr-turn1.xirsys.com:443?transport=tcp",
-          "turns:fr-turn1.xirsys.com:5349?transport=tcp"
-        ]
-      }]
+      }] :
+        [{ urls: ["stun:fr-turn1.xirsys.com"] },
+        {
+          username: "PluGghHFlZCDABIPpmpILVA6YPhQ8rO7HuEdUIRX8j_Xafgzcv-VmxBd4X1ze1nhAAAAAGLizmlhYWEx",
+          credential: "f89e55e0-0e9e-11ed-92de-0242ac120004", urls: ["turn:fr-turn1.xirsys.com:80?transport=udp",
+            "turn:fr-turn1.xirsys.com:3478?transport=udp",
+            "turn:fr-turn1.xirsys.com:80?transport=tcp",
+            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn1.xirsys.com:443?transport=tcp",
+            "turns:fr-turn1.xirsys.com:5349?transport=tcp"]
+        }]
     }
 
     this.peerConn = new RTCPeerConnection(configuration)
@@ -109,10 +106,10 @@ export class VideoChatComponent implements OnInit {
       }
     })
   }
-/* #CR COMMENT => {
-*******************
-YOUR COMMENT
-} */
+  /* #CR COMMENT => {
+  *******************
+  YOUR COMMENT
+  } */
   async createOffer() {
     await this.createPeerConnection()
     const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()
@@ -145,7 +142,7 @@ YOUR COMMENT
     this.localStream.getVideoTracks()[0].enabled = this.isVideo
   }
 
-  
+
 
   answerCall(bool: boolean) {
     if (bool) {

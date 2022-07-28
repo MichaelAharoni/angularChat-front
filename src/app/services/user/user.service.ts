@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable, isDevMode } from '@angular/core'
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Observable } from 'rxjs'
 import { User } from 'src/app/models/classes'
+import { ContactService } from '../contact/contact.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    ) { }
   private _$currUser = new BehaviorSubject<User>({} as User);
   public $currUser = this._$currUser.asObservable().pipe(distinctUntilChanged());
 
@@ -15,6 +18,11 @@ export class UserService {
 
   getCurrUser(){
     return this._$currUser.value
+  }
+
+  async updateUser(user:User){
+    const updatedUser = await lastValueFrom(this.http.put(`${this.URL}/api/user`,user)) as User
+    this._$currUser.next(updatedUser)
   }
 
   async getUserByPhoneNumber(credantials: string): Promise<User> {

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DesktopLoginGuard } from './desktop-login.guard';
+import { AuthenticateGuard } from './authenticate.guard';
 
-describe('DesktopLoginGuard', () => {
-  let guard: DesktopLoginGuard;
+describe('AuthenticateGuard', () => {
+  let guard: AuthenticateGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(DesktopLoginGuard);
+    guard = TestBed.inject(AuthenticateGuard);
   });
 
   it('should be created', () => {

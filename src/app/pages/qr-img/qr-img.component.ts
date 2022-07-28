@@ -25,6 +25,7 @@ export class QrImgComponent implements OnInit {
   }
   ngOnInit(): void {
     this.socketService.on('get-user-details', async (phoneNum: string) => {
+      console.log('GETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETINGETIN')
       await this.userService.login({ phoneNum })
       this.router.navigateByUrl('/')
     })

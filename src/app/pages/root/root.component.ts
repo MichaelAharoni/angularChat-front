@@ -1,6 +1,6 @@
 import { User } from '../../models/classes';
 import { UserService } from 'src/app/services/user/user.service';
-import { UserContactService } from '../../services/user-contacts/user-contacts.service';
+import { ContactService } from '../../services/contact/contact.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SocketService } from 'src/app/services/socket/socket.service';
@@ -17,7 +17,7 @@ export class RootComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService,
-    private userContactService: UserContactService,
+    private ContactService: ContactService,
     private userService: UserService
   ) { }
   title = 'angularChat';

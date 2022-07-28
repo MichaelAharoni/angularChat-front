@@ -41,7 +41,7 @@ export class ContactPickerComponent implements OnInit,AfterViewInit {
 
 
 
-  async loadContacts() : Promise<void> {
+  async getContactsFromNavigator() : Promise<void> {
     const navigator: any = window.navigator;
 
     if ('contacts' in navigator && 'ContactsManager' in window) {

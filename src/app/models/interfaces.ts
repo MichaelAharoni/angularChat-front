@@ -48,3 +48,7 @@ export interface RtcPeerConn {
     phoneNum: string,
     peer: RTCPeerConnection,
 }
+
+export interface NavigatorWithContacts extends Navigator {
+    contacts?:any
+}

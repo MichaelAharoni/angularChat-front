@@ -1,7 +1,7 @@
 import { UserService } from 'src/app/services/user/user.service';
 import { ContactUser } from './../models/interfaces';
 import { lastValueFrom } from 'rxjs';
-import { UserContactService } from '../services/user-contacts/user-contacts.service'
+import { ContactService } from '../services/contact/contact.service'
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SocketService } from '../services/socket/socket.service';
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService,
-    private userContactService: UserContactService,
+    private contactService: ContactService,
     private userService: UserService
   ) { }
   title = 'angularChat';
@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.userService.login()
+    this.userService.$currUser.subscribe(({ contacts }) => {
+      this.contactService.updateContacts(contacts)
+    })
   }
 
   makeId(length = 6) {

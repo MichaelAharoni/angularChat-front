@@ -5,14 +5,15 @@ import { RootComponent } from './pages/root/root.component';
 import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component'
 import { VideoChatComponent } from './pages/video-chat/video-chat.component'
 import { RegisterComponent } from './pages/register/register.component'
-import { DesktopLoginGuard } from './guards/desktop-login.guard'
+import { AuthenticateGuard } from './guards/authenticate.guard'
+import { ContactResolver } from './resolvers/contact.resolver';
 
 const routes: Routes = [
-  { path: 'scan', component: QrScannerComponent, canActivate: [DesktopLoginGuard] },
+  { path: 'scan', component: QrScannerComponent, canActivate: [AuthenticateGuard],resolve:{contacts:ContactResolver} },
   { path: 'qr', component: QrImgComponent },
-  { path: 'video-chat', component: VideoChatComponent, canActivate: [DesktopLoginGuard] },
+  { path: 'video-chat', component: VideoChatComponent, canActivate: [AuthenticateGuard] },
   { path: 'register', component: RegisterComponent },
-  { path: '', component: RootComponent, canActivate: [DesktopLoginGuard] },
+  { path: '', component: RootComponent, canActivate: [AuthenticateGuard] },
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
