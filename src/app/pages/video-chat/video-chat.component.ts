@@ -109,10 +109,7 @@ export class VideoChatComponent implements OnInit {
       }
     })
   }
-/* #CR COMMENT => {
-*******************
-YOUR COMMENT
-} */
+
   async createOffer() {
     await this.createPeerConnection()
     const offer: RTCSessionDescriptionInit = await this.peerConn.createOffer()

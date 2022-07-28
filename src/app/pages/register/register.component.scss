@@ -1,0 +1,117 @@
+.register {
+    background-image: url(../../../assets/imgs/background-.png);
+
+    // background-image: url(../../../assets/imgs/dark-bg.jpg);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .register-btn {
+        background-color: #07baa7;
+        display: block;
+        width: 220px;
+        height: 3em;
+        // border-radius: 1em;
+        border: unset;
+        color: white;
+
+        :hover {}
+    }
+
+    & header {
+        height: 40vh;
+
+        .logo {
+            margin: auto;
+            width: 22vh;
+            height: 22vh;
+        }
+    }
+
+    .login-form {
+        // margin-block-start: 16vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10.5em;
+        height: 100%;
+
+        & button{
+            justify-self: flex-end;
+        }
+
+        .phone-number-container {
+            position: relative;
+            height: 3em;
+            border-block-end: 1px solid #07baa7;
+
+            span {
+                position: absolute;
+            }
+
+            input {
+                color: #145e55;
+                display: flex;
+                align-items: flex-end;
+                border: none;
+                height: 100%;
+                width: 100%;
+                background-color: transparent;
+                outline: none !important;
+                font-size: 20px;
+                padding: 0.75rem 3px;
+
+            }
+        }
+    }
+
+
+
+    .vcode-form {
+        margin-block-start: 16vh;
+        margin-inline: auto;
+
+        // width: 80%;
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            margin: 0 4px;
+            text-align: center;
+            font-size: 1.5em;
+            border: unset;
+            width: 1.5em;
+            height: 1.5em;
+            background-color: rgba(248, 255, 255, 0.435);
+            border-bottom: 2px solid #07baa7
+        }
+
+        button {
+            display: block;
+            margin: 50% auto;
+            transform: translate(0,-50%);
+        }
+
+    }
+}
+
+
+
+/*
+
+<form class="vCode-form" *ngIf="!isCodeReady" (ngSubmit)="onSumbitVCode()">
+        <label for="v-code">Verfication code:</label>
+        <!-- <input  [(ngModel)]="vCode" type="text" name="v-code"> -->
+        <input *ngFor="let val of codeLength ;index as idx; trackBy:generateKey " [(ngModel)]="codeLength[idx]"
+            type="text" [ngClass]="idx+''" (keydown.backspace)="onBackSpace($event)" (input)="onInputNumber($event)"
+            maxlength="1" onfocus="this.value=''" [name]="idx+''">
+        <button class="sumbit-code">Submit</button>
+    </form>
+    <p>{{codeLength|json}}</p>
+</div>
+
+
+
+*/
