@@ -14,7 +14,7 @@
     <form class="vcode-form" *ngIf="isCodeReady" (ngSubmit)="onSumbitVCode()">
             <h1  >Verfication code:</h1>
             <input *ngFor="let val of codeLength ;index as idx; trackBy:generateKey" [focus]="idx === 0" [(ngModel)]="codeLength[idx]"
-            type="text" [attr.data-idx]="idx" (keydown.backspace)="onBackSpace($event)" (input)="onInputNumber($event)"
+            type="number" [attr.data-idx]="idx" (keydown.backspace)="onBackSpace($event)" (input)="onInputNumber($event)"
             maxlength="1" onfocus="this.value=''" [name]="idx+''">
             <button class="sumbit-code register-btn">Submit</button>
     </form>

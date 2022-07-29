@@ -30,7 +30,9 @@ export class UserService {
   }
 
   async register(user: User): Promise<User> {
+    console.log(user)
     const currUser = await lastValueFrom(this.http.post(`${this.URL}/api/auth/authenticate`,user,{withCredentials:true})) as User
+    console.log('created user',currUser)
     this._$currUser.next(currUser)
     return currUser
   }

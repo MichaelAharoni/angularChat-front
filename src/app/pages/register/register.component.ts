@@ -47,10 +47,9 @@ export class RegisterComponent implements OnInit {
   async onSumbitVCode() {
     this.vCode = this.codeLength.join('')
     if (this.vCode.length !== 6) return
-    console.log('hey')
     const isMatch = await this.verifyService.onMatchVCode(this.vCode, this.phoneNum)
     if (isMatch) this.onSaveUser()
-    else console.log('nope!')
+    else console.log('no match!!')
 
   }
 
