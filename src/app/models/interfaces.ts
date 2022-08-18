@@ -14,6 +14,7 @@ export interface chatRoom {
     participents: string[]
     roomImg: string
     createdAt: Date
+    isGroup: Boolean
     msgs: msg[]
     lastMsg: msg
 }

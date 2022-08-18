@@ -1,3 +1,4 @@
+import { SocketService } from './../socket/socket.service';
 import { HttpClient } from '@angular/common/http'
 import { Injectable, isDevMode } from '@angular/core'
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Observable } from 'rxjs'
@@ -10,6 +11,7 @@ import { ContactService } from '../contact/contact.service';
 export class UserService {
   constructor(
     private http: HttpClient,
+    private socketService: SocketService
     ) { }
   private _$currUser = new BehaviorSubject<User>({} as User);
   public $currUser = this._$currUser.asObservable().pipe(distinctUntilChanged());
@@ -40,5 +42,6 @@ export class UserService {
   async login(credantials:{phoneNum:string} = {phoneNum:''}): Promise<void> {
     const currUser = await lastValueFrom(this.http.post(`${this.URL}/api/auth/authenticate`,credantials,{withCredentials:true})) as User
     this._$currUser.next(currUser)
+    this.socketService.emit('join-room', currUser.phoneNum)
   }
 }

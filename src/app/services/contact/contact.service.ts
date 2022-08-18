@@ -1,8 +1,7 @@
 import { UserService } from 'src/app/services/user/user.service';
 import { ContactUser, NavigatorWithContacts } from '../../models/interfaces';
 import { BehaviorSubject, distinctUntilChanged, take, lastValueFrom } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Injectable, isDevMode, ChangeDetectorRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +16,16 @@ export class ContactService {
   async getContactsFromNavigator(): Promise<ContactUser[] | []> {
     const navigator: NavigatorWithContacts = window.navigator
     if ('contacts' in navigator && 'ContactsManager' in window) {
-      const props = await navigator.contacts.getProperties();
-      const contacts = await navigator.contacts.select(props, { multiple: true });
+      const props = await navigator.contacts.getProperties()
+        //The line below may cause some bugs while trying to get contacts on prod.
+        .filter((property: string) => property === 'name' || property === 'tel');
+      let contacts = await navigator.contacts.select(props, { multiple: true });
+      contacts = contacts.map((contact: { name: string[], tel: string[] }) => {
+        return {
+          userName: contact.name[0],
+          phoneNum: contact.tel[contact.tel.length - 1].replace('+972','0')
+        }
+      })
       const user = await lastValueFrom(this.userService.$currUser.pipe(take(1)))
       user.contacts = contacts
       await this.userService.updateUser(user)

@@ -140,7 +140,6 @@ export class VideoChatComponent implements OnInit {
   }
 
 
-
   answerCall(bool: boolean) {
     if (bool) {
       this.createAnswer(this.newOffer)

@@ -15,7 +15,8 @@ export class AuthenticateGuard implements CanActivate {
   canActivate(): Promise<boolean> {
     this.userService.$currUser.subscribe((user) => this.isLoggedIn = !!Object.keys(user || {}).length)
     return new Promise((resolve) => {
-      const maxTimePass: number = Date.now() + 1000
+      // const maxTimePass: number = Date.now() + 1000
+      const maxTimePass: number = Date.now() + 10000 // Temproary
       if (!this.isLoggedIn) {
         this.checkIntervalId = window.setInterval(() => {
           if (this.isLoggedIn) {

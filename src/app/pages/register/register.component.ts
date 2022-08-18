@@ -40,7 +40,6 @@ export class RegisterComponent implements OnInit {
     if (regex.test(this.phoneNum)) {
       await this.verifyService.onSendVerification(this.phoneNum)
       this.isCodeReady = true
-
     }
   }
 

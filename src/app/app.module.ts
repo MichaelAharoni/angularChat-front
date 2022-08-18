@@ -15,7 +15,10 @@ import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component';
 import { QrImgComponent } from './pages/qr-img/qr-img.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RootComponent } from './pages/root/root.component';
-import { FocusDirective } from './directives/focus.directive'
+import { FocusDirective } from './directives/focus.directive';
+import { CloseAfterDirective } from './directives/close-after.directive';
+import { ContactList } from './contact-list/contact-list.component';
+import { ContactPreview } from './contact-preview/contact-preview.component'
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;
@@ -33,7 +36,10 @@ const config: SocketIoConfig = {
     QrImgComponent,
     RegisterComponent,
     RootComponent,
-    FocusDirective
+    FocusDirective,
+    CloseAfterDirective,
+    ContactList,
+    ContactPreview
   ],
   imports: [
     BrowserModule,
